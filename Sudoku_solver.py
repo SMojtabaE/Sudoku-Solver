@@ -4,9 +4,9 @@
 #     -find empty function      DONE
 #     -check validation         DONE
 #     -Backtracking             DONE
-#     -forward checking
-#     -mrv
-#     -degreee
+#     -forward checking         DONE
+#     -mrv                      DONE
+#     -degreee                  DONE
 
 
 def printboard(board):
@@ -33,11 +33,6 @@ def number_Of_squers(number): # this function is just for checking that the sque
 
 def check_validation(board,pos,valu):
     #checking rows
-
-    # rows = board[pos[0]]
-    # if valu in rows:
-    #     return False
-
     for i in range(len(board)):
         if board[pos[0]][i] == valu:
             return False
@@ -51,15 +46,12 @@ def check_validation(board,pos,valu):
     starting_row = (pos[0] // squers) * squers
     starting_col = (pos[1] // squers) * squers
 
-    #checking the squer
     for i in range(starting_row,starting_row + squers):
         for j in range(starting_col,starting_col + squers): 
             if board[i][j] == valu:
                 return False
     return True
 
-
-## uptomize the forward checking function
 def forward_checking(board):
     empty_valus = find_empty(board) ##
     domins = {}  ##
@@ -112,11 +104,10 @@ def degree(poses,board):  # [(2,1),(3,0)]
 
 def mrv(domins,board):
     poses = []
-    tmp = size_Of_board + 1   # 
+    tmp = size_Of_board + 1   # for 9*9 tmp is 9 and in this case evrithing is less than this number 
     for domin in domins:
         if len(domins[domin]) == tmp:
             poses.append(domin)
-
         elif len(domins[domin]) < tmp:
             poses.clear()
             poses.append(domin)
@@ -128,7 +119,6 @@ def mrv(domins,board):
     return poses.pop()
 
 def solve(board):
-    # pos = find_empty(board)
 
     domins = forward_checking(board)
     if not domins:
@@ -200,10 +190,11 @@ board3 = [
             [0, 0, 5,   2, 0, 6,   3, 0, 0]
         ]
 
-size_Of_board =  int(input("enter the size of sudoku : "))
-squers = number_Of_squers(size_Of_board)
 
 boardtest = board3
+
+size_Of_board =  len(boardtest)
+squers = number_Of_squers(size_Of_board)
 
 printboard(boardtest)
 
