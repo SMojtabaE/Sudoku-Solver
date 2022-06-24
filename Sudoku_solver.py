@@ -74,22 +74,67 @@ def forward_checking(board):
             domins[pos].pop
     return domins
 
-def mrv(domins):
-    pos = ()
+def degree(poses,board):  # [(2,1),(3,0)]
+    sum = {}
+    count = 0
+    #checking row
+    for pos in poses:
+        for a in range(len(board)):
+            if board[pos[0]][a] == 0:
+                count += 1
+        sum[pos] = count
+        count = 0
+
+    #checking col
+    for pos in poses:
+        for j in range(len(board)):
+            if board[j][pos[1]] == 0:
+                sum[pos] += 1
+    
+    #checking Squers
+    for pos in poses:
+        starting_row = (pos[0] // squers) * squers
+        starting_col = (pos[1] // squers) * squers
+
+        for i in range(starting_row,starting_row + squers):
+            for j in range(starting_col,starting_col + squers): 
+                if board[i][j] == 0:
+                    sum[pos] += 1
+
+    result = ()
+    for pos in sum:             # sum = {(0,0) : 5, (1,2) : 8}
+        if sum[pos] > count:
+            count = sum[pos]
+            result = pos
+    
+    return result
+
+
+def mrv(domins,board):
+    poses = []
     tmp = size_Of_board + 1   # 
     for domin in domins:
-        if len(domins[domin]) < tmp:
-            pos = domin
+        if len(domins[domin]) == tmp:
+            poses.append(domin)
+
+        elif len(domins[domin]) < tmp:
+            poses.clear()
+            poses.append(domin)
             tmp = len(domins[domin])
-    return pos
+    
+    if len(poses) > 1 :
+        return degree(poses,board)
+    
+    return poses.pop()
 
 def solve(board):
     # pos = find_empty(board)
 
     domins = forward_checking(board)
-    start = mrv(domins)
     if not domins:
         return True
+    start = mrv(domins,board)
+    
 
     # for pos in domins:                  ### without MRV
     #     for i in domins[pos]:
@@ -102,8 +147,6 @@ def solve(board):
 
     for i in domins[start]:
             board[start[0]][start[1]] = i
-            # printboard(board)
-            # print("--------")
             if solve(board):
                 return True
             board[start[0]][start[1]] = 0
@@ -112,7 +155,7 @@ def solve(board):
     return False  # this sudoku cant be solved
 
 
-board = [                   #this board cant be solved
+board0 = [                   #this board cant be solved
             [0, 1,  0, 4],         
             [3, 0,  1, 0],
 
@@ -159,16 +202,14 @@ board3 = [
 
 size_Of_board =  int(input("enter the size of sudoku : "))
 squers = number_Of_squers(size_Of_board)
-# domins = {} # { Pos : Domin}
-# empty_valus = find_empty(board1)
 
+boardtest = board3
 
-printboard(board3)
-#forward_checking(board2)
+printboard(boardtest)
 
-if solve(board3):
+if solve(boardtest):
     print("-----Solved-Sudoku-----")
-    printboard(board3)
+    printboard(boardtest)
 else:
     print("board cant be solved")
 
