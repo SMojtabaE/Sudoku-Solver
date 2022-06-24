@@ -74,34 +74,39 @@ def forward_checking(board):
             domins[pos].pop
     return domins
 
-# def mrv(domins):
-#     pos = ()
-#     tmp = [0,0,0,0,0,0,0,0,0,0]   # 
-#     for domin in domins:
-#         if len(domins[domin]) < tmp:
-#             pos = domin
-    # return pos
+def mrv(domins):
+    pos = ()
+    tmp = size_Of_board + 1   # 
+    for domin in domins:
+        if len(domins[domin]) < tmp:
+            pos = domin
+            tmp = len(domins[domin])
+    return pos
 
 def solve(board):
     # pos = find_empty(board)
 
     domins = forward_checking(board)
-    # start = mrv(domins)
+    start = mrv(domins)
     if not domins:
         return True
 
-    for pos in domins:
-        
-        for i in domins[pos]:
-            board[pos[0]][pos[1]] = i
+    # for pos in domins:                  ### without MRV
+    #     for i in domins[pos]:
+    #         board[pos[0]][pos[1]] = i
+    #         # printboard(board)
+    #         # print("--------")
+    #         if solve(board):
+    #             return True
+    #         board[pos[0]][pos[1]] = 0
 
+    for i in domins[start]:
+            board[start[0]][start[1]] = i
             # printboard(board)
             # print("--------")
             if solve(board):
-                
                 return True
-
-            board[pos[0]][pos[1]] = 0
+            board[start[0]][start[1]] = 0
          
 
     return False  # this sudoku cant be solved
@@ -158,12 +163,12 @@ squers = number_Of_squers(size_Of_board)
 # empty_valus = find_empty(board1)
 
 
-printboard(board1)
+printboard(board3)
 #forward_checking(board2)
 
-if solve(board1):
+if solve(board3):
     print("-----Solved-Sudoku-----")
-    printboard(board1)
+    printboard(board3)
 else:
     print("board cant be solved")
 
