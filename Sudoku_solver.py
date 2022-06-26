@@ -8,15 +8,23 @@
 #     -mrv                      DONE
 #     -degreee                  DONE
 
+def number_Of_squers(number): # this function is just for checking that the squer is 2*2 or 3*3 
+    if number == 9:
+        return 3
+    elif number == 4:
+        return 2
 
-def printboard(board):
+
+
+
+def printboard(board):          # print board like sudoku
 
     for i in range(len(board)):
         for j in range(len(board)):
             print(board[i][j], end=" ")
         print("")
 
-def find_empty(board):
+def find_empty(board):          # find the empty positions in board(the positions that are 0),and return an arry of positions
     empty_valus = []
     for i in range(len(board)):
         for j in range(len(board)):
@@ -25,13 +33,7 @@ def find_empty(board):
     return empty_valus
 
 
-def number_Of_squers(number): # this function is just for checking that the squer is 2*2 or 3*3 
-    if number == 9:
-        return 3
-    elif number == 4:
-        return 2
-
-def check_validation(board,pos,valu):
+def check_validation(board,pos,valu):           # checks if a number is valid in position
     #checking rows
     for i in range(len(board)):
         if board[pos[0]][i] == valu:
@@ -52,7 +54,7 @@ def check_validation(board,pos,valu):
                 return False
     return True
 
-def forward_checking(board):
+def forward_checking(board):                    # find the domins of a position
     empty_valus = find_empty(board) ##
     domins = {}  ##
     for pos in empty_valus:
@@ -66,7 +68,7 @@ def forward_checking(board):
             domins[pos].pop
     return domins
 
-def degree(poses,board):  # [(2,1),(3,0)]
+def degree(poses,board):  # [(2,1),(3,0)]           # gets an array of positions and return the position that has most rilation
     sum = {}
     count = 0
     #checking row
@@ -102,7 +104,7 @@ def degree(poses,board):  # [(2,1),(3,0)]
     return result
 
 
-def mrv(domins,board):
+def mrv(domins,board):              # finds the position that has less domin
     poses = []
     tmp = size_Of_board + 1   # for 9*9 tmp is 9 and in this case evrithing is less than this number 
     for domin in domins:
@@ -118,14 +120,13 @@ def mrv(domins,board):
     
     return poses.pop()
 
-def solve(board):
+
+def solve(board):               # solve the problem by backtracking
 
     domins = forward_checking(board)
     if not domins:
         return True
     start = mrv(domins,board)
-    
-
     # for pos in domins:                  ### without MRV
     #     for i in domins[pos]:
     #         board[pos[0]][pos[1]] = i
@@ -176,7 +177,7 @@ board2 = [
         ]
 
 
-board3 = [
+board3 = [                                          # TEST CASE 
             [3, 0, 6,   5, 0, 8,   4, 0, 0],
             [5, 2, 0,   0, 0, 0,   0, 0, 0],
             [0, 8, 7,   0, 0, 0,   0, 3, 1],
@@ -191,8 +192,22 @@ board3 = [
         ]
 
 
-boardtest = board3
+board4 = [
+            [0, 0, 0,   0, 0, 0,   0, 0, 0],
+            [0, 0, 0,   0, 0, 0,   0, 0, 0],
+            [0, 0, 0,   0, 0, 0,   0, 0, 0],
 
+            [0, 0, 0,   0, 0, 0,   0, 0, 0],
+            [0, 0, 0,   0, 0, 0,   0, 0, 0],
+            [0, 0, 0,   0, 0, 0,   0, 0, 0],
+
+            [0, 0, 0,   0, 0, 0,   0, 0, 0],
+            [0, 0, 0,   0, 0, 0,   0, 0, 0],
+            [1, 0, 2,   0, 0, 0,   0, 0, 0]
+        ]
+
+
+boardtest = board3
 size_Of_board =  len(boardtest)
 squers = number_Of_squers(size_Of_board)
 
